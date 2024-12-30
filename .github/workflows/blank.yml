@@ -6,7 +6,7 @@ on:
       uboot_ref:
         description: u-boot ref
         required: true
-        default: master
+        default: npcm-v2023.10
         type: string
 
 jobs:
@@ -43,7 +43,6 @@ jobs:
           make mrproper
           make ${{ matrix.boards.config }}
           make KCFLAGS="-Werror" CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
-          tools/mkimage -l u-boot.itb
 
       - name: Upload artifacts
         if: ${{ success() && steps.build.conclusion != 'skipped' }}
