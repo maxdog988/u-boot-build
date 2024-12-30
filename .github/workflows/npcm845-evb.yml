@@ -1,6 +1,7 @@
 name: Build u-boot for npcm845
 run-name: u-boot ${{ inputs.uboot_ref }} for npcm845
 on:
+  pull_request:   # Kick off this on every PR
   workflow_dispatch:
     inputs:
       uboot_ref:
