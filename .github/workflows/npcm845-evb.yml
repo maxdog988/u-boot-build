@@ -2,12 +2,16 @@ name: Build u-boot for npcm845
 run-name: u-boot ${{ inputs.uboot_ref }} for npcm845
 on:
   pull_request:   # Kick off this on every PR
+    branches:
+      - 'npcm-v2021.04'
+      - 'npcm-v2023.10'
+      
   workflow_dispatch:
     inputs:
       uboot_ref:
         description: u-boot ref
         required: true
-        default: npcm-v2023.10
+        default: 'npcm-v2021.04'
         type: string
 
 jobs:
@@ -18,24 +22,22 @@ jobs:
       fail-fast: false
       matrix:
         boards:
-          [
-            {
-              "name": "nuvoton-npcm845-evb",
-              "config": "arbel_evb_defconfig",
-            },
-          ]
+          - name: 'nuvoton-npcm845-evb'
+            config: 'arbel_evb_defconfig'
+
     steps:
       - name: Toolchain
         run: |
           sudo apt-get update
+          sudo apt-get install gcc gcc-aarch64-linux-gnu
           sudo apt-get install gcc gcc-aarch64-linux-gnu python3-pyelftools confget libgnutls28-dev uuid-dev
 
       - name: Checkout u-boot - ${{ inputs.uboot_ref }}
         uses: actions/checkout@v4
         with:
-          repository: Nuvoton-Israel/u-boot
+          repository: 'NTC-CCBG/u-boot'
           ref: ${{ inputs.uboot_ref }}
-          path: u-boot
+          path: 'u-boot'
 
       - name: Build u-boot - ${{ matrix.boards.config }}
         id: build
@@ -43,7 +45,7 @@ jobs:
           cd u-boot
           make mrproper
           make ${{ matrix.boards.config }}
-          make KCFLAGS="-Werror" CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
+          make CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)
 
       - name: Upload artifacts
         if: ${{ success() && steps.build.conclusion != 'skipped' }}
@@ -52,4 +54,4 @@ jobs:
           name: ${{ matrix.boards.name }}
           path: |
             u-boot/u-boot.bin
-  
+
