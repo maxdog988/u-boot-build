@@ -1,15 +1,10 @@
-name: Build u-boot for RK3308
-run-name: u-boot ${{ inputs.uboot_ref }} for RK3308
+name: Build u-boot for npcm845
+run-name: u-boot ${{ inputs.uboot_ref }} for npcm845
 on:
   workflow_dispatch:
     inputs:
       uboot_ref:
         description: u-boot ref
-        required: true
-        default: master
-        type: string
-      rkbin_ref:
-        description: rkbin ref
         required: true
         default: master
         type: string
