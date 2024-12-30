@@ -22,6 +22,7 @@ jobs:
               "name": "nuvoton-npcm845-evb",
               "config": "arbel_evb_defconfig",
             },
+          }
     steps:
       - name: Toolchain
         run: |
