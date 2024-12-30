@@ -5,6 +5,7 @@ on:
     branches:
       - 'npcm-v2021.04'
       - 'npcm-v2023.10'
+      - 'npcm-v2024.10'
       
   workflow_dispatch:
     inputs:
@@ -13,6 +14,10 @@ on:
         required: true
         default: 'npcm-v2021.04'
         type: string
+        options:
+          - npcm-v2021.04
+          - npcm-v2023.10
+          - npcm-v2024.10
 
 jobs:
   build:
